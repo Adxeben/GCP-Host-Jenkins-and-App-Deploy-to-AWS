@@ -14,6 +14,7 @@ pipeline {
             steps {
                 script {
                     echo "building jar"
+                    buildJar()
                 }
             }
         }
@@ -21,6 +22,7 @@ pipeline {
             steps {
                 script {
                     echo "building image"
+                    buildImage()
                 }
             }
         }
