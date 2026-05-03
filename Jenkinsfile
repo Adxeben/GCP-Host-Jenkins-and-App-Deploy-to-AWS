@@ -1,3 +1,7 @@
+#!/usr/bin/env groovy
+
+@Library("Jenkins-shared-library")
+
 def gv
 
 pipeline {
@@ -41,7 +45,11 @@ pipeline {
             }
             steps {
                 script {
-                    gv.createImage()
+                    buildDockerImage(
+                    imageName: "app-jenkins",
+                    imageTag: "5.0"
+                )
+                    // gv.createImage()
                 }
             }
         }
@@ -53,7 +61,12 @@ pipeline {
             }
             steps {
                 script {
-                    gv.publishImage()
+                    dockerpublish(
+                        imageName: "sunesis003/app-jenkins",
+                        imageTag: "5.0",
+                        credentialsId: "docker-hub-repo"
+                    )
+                    // gv.publishImage()
                 }
             }
         }
