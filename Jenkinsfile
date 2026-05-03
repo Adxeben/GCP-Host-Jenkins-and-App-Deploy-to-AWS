@@ -14,7 +14,19 @@ pipeline {
                 }
             }
         }
+        stage("test jar") {
+            steps {
+                script {
+                    gv.testJar()
+                }
+            }
+        }
         stage("build jar") {
+            when {
+                expression {
+                    BRANCH_NAME == "master"
+                }
+            }
             steps {
                 script {
                     gv.buildJar()
@@ -22,13 +34,23 @@ pipeline {
             }
         }
         stage("create image") {
+            when {
+                expression {
+                    BRANCH_NAME == "master"
+                }
+            }
             steps {
                 script {
-                    gv.dockerImage()
+                    gv.createImage()
                 }
             }
         }
         stage("publish image") {
+            when {
+                expression {
+                    BRANCH_NAME == "master"
+                }
+            }
             steps {
                 script {
                     gv.publishImage()
@@ -36,6 +58,11 @@ pipeline {
             }
         }
         stage("deploy") {
+            when {
+                expression {
+                    BRANCH_NAME == "master"
+                }
+            }
             steps {
                 script {
                     gv.deployApp()

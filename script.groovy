@@ -1,12 +1,19 @@
+def testJar() {
+    echo "testing the application..."
+    echo "executing pipeline for branch $BRANCH_NAME"
+    sh "mvn test"
+} 
+
 def buildJar() {
     echo "building the application..."
     sh "mvn clean package"
 } 
 
-def dockerImage() {
+def createImage() {
     echo "creating the docker image..."
     sh "docker build -t sunesis003/app-jenkins:4.0 ."
 } 
+
 def publishImage() {
     echo "publishing to docker hub repo..."
     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
