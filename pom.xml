@@ -10,6 +10,7 @@
 
     <build>
         <plugins>
+            <!-- Packages the app as an executable Spring Boot JAR (includes dependencies) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
