@@ -26,11 +26,11 @@ pipeline {
             }
         }
         stage("build jar") {
-            when {
-                expression {
-                    BRANCH_NAME == "master"
-                }
-            }
+            // when {
+            //     expression {
+            //         BRANCH_NAME == "master"
+            //     }
+            // }
             steps {
                 script {
                     gv.buildJar()
@@ -38,11 +38,11 @@ pipeline {
             }
         }
         stage("create image") {
-            when {
-                expression {
-                    BRANCH_NAME == "master"
-                }
-            }
+            // when {
+            //     expression {
+            //         BRANCH_NAME == "master"
+            //     }
+            // }
             steps {
                 script {
                     buildDockerImage(
@@ -54,11 +54,11 @@ pipeline {
             }
         }
         stage("publish image") {
-            when {
-                expression {
-                    BRANCH_NAME == "master"
-                }
-            }
+            // when {
+            //     expression {
+            //         BRANCH_NAME == "master"
+            //     }
+            // }
             steps {
                 script {
                     dockerpublish(
@@ -71,11 +71,11 @@ pipeline {
             }
         }
         stage("deploy") {
-            when {
-                expression {
-                    BRANCH_NAME == "master"
-                }
-            }
+            // when {
+            //     expression {
+            //         BRANCH_NAME == "master"
+            //     }
+            // }
             steps {
                 script {
                     gv.deployApp()
