@@ -1,9 +1,3 @@
-def testJar() {
-    echo "testing the application..."
-    // echo "executing pipeline for branch $BRANCH_NAME"
-    sh "mvn test"
-} 
-
 def buildJar() {
     echo "building the application..."
     sh "mvn clean package"
