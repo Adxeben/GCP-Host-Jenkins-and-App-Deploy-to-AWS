@@ -1,6 +1,6 @@
 def testJar() {
     echo "testing the application..."
-    echo "executing pipeline for branch $BRANCH_NAME"
+    // echo "executing pipeline for branch $BRANCH_NAME"
     sh "mvn test"
 } 
 
