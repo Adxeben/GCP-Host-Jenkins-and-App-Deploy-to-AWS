@@ -1,6 +1,6 @@
 def buildJar() {
     echo "building and testing the application..."
-    echo "executing pipeline for branch $BRANCH_NAME"
+    echo "executing pipeline for $BRANCH_NAME branch"
     // sh "mvn clean package"
 } 
 
