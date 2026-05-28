@@ -36,7 +36,7 @@ pipeline {
         stage("publish image") {
             when {
                 expression {
-                    def BRANCH_NAME == "main"
+                    BRANCH_NAME == "main"
                 }
             }
             steps {
