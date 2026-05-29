@@ -22,11 +22,11 @@ pipeline {
             }
         }
         stage("create image") {
-            when {
-                expression {
-                    BRANCH_NAME == "main"
-                }
-            }
+            // when {
+            //     expression {
+            //         BRANCH_NAME == "main"
+            //     }
+            // }
             steps {
                 script {
                     gv.createImage()
@@ -34,11 +34,11 @@ pipeline {
             }
         }
         stage("publish image") {
-            when {
-                expression {
-                    BRANCH_NAME == "main"
-                }
-            }
+            // when {
+            //     expression {
+            //         BRANCH_NAME == "main"
+            //     }
+            // }
             steps {
                 script {
                     gv.publishImage()
@@ -46,11 +46,11 @@ pipeline {
             }
         }
         stage("deploy") {
-            when {
-                expression {
-                    BRANCH_NAME == "main"
-                }
-            }
+            // when {
+            //     expression {
+            //         BRANCH_NAME == "main"
+            //     }
+            // }
             steps {
                 script {
                     gv.deployApp()
