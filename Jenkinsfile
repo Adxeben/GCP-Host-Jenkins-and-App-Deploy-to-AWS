@@ -29,11 +29,7 @@ pipeline {
             // }
             steps {
                 script {
-<<<<<<< Updated upstream
                     gv.createImage()
-=======
-                    createImage("sunesis003/app-jenkins:param-8.0")
->>>>>>> Stashed changes
                 }
             }
         }
@@ -45,11 +41,7 @@ pipeline {
             // }
             steps {
                 script {
-<<<<<<< Updated upstream
                     gv.publishImage()
-=======
-                    publishImage("sunesis003/app-jenkins:param-8.0")
->>>>>>> Stashed changes
                 }
             }
         }
