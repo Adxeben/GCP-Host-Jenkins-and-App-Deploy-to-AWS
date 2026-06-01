@@ -14,6 +14,13 @@ pipeline {
                 }
             }
         }
+        stage("version increment") {
+            steps {
+                script {
+                    gv.increaseVersion()
+                }
+            }
+        }
         stage("build jar") {
             steps {
                 script {
@@ -22,11 +29,6 @@ pipeline {
             }
         }
         stage("create image") {
-            when {
-                expression {
-                    BRANCH_NAME == "main"
-                }
-            }
             steps {
                 script {
                     gv.createImage()
@@ -34,26 +36,23 @@ pipeline {
             }
         }
         stage("publish image") {
-            when {
-                expression {
-                    BRANCH_NAME == "main"
-                }
-            }
             steps {
                 script {
                     gv.publishImage()
                 }
             }
         }
-        stage("deploy") {
-            when {
-                expression {
-                    BRANCH_NAME == "main"
-                }
-            }
+        stage("deploy application") {
             steps {
                 script {
                     gv.deployApp()
+                }
+            }
+        }
+        stage("git version commit") {
+            steps {
+                script {
+                    gv.commitVersionGit()
                 }
             }
         }
