@@ -28,14 +28,14 @@ pipeline {
         stage("create image") {
             steps {
                 script {
-                    createImage("sunesis003/app-jenkins:param-7.0")
+                    createImage("sunesis003/app-jenkins:jsl-1.0")
                 }
             }
         }
         stage("publish image") {
             steps {
                 script {
-                    publishImage("sunesis003/app-jenkins:param-7.0")
+                    publishImage("sunesis003/app-jenkins:jsl-1.0")
                 }
             }
         }
