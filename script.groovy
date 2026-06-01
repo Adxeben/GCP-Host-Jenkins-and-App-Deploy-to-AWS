@@ -44,8 +44,8 @@ def commitVersionGit() {
 
 
         sh "git add ."
-        sh "git commit -m 'version increment commit to git' || true"
-        sh "git push https://${GITHUB_USER}:${GITHUB_PASS}@github.com/Adxeben/Jenkins-deploy-AWS.git HEAD:main"
+        sh "git commit -m 'version increment commit to remote git repo'"
+        sh "git push https://${GITHUB_USER}:${GITHUB_PASS}@github.com/Adxeben/Jenkins-deploy-AWS.git HEAD:${env.BRANCH_NAME}"
     }   
 } 
 
