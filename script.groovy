@@ -47,7 +47,7 @@ def commitVersionGit() {
         sh "git add ."
         sh "git commit -m 'version increment commit to remote git repo'"
         sh "git remote set-url origin https://github.com/Adxeben/Jenkins-deploy-AWS.git"
-        sh "git push https://${GITHUB_USER}:${GITHUB_PASS}@github.com/Adxeben/Jenkins-deploy-AWS.git HEAD:jenkins-jobs"
+        sh "git push https://$GITHUB_USER:$GITHUB_PASS@github.com/Adxeben/Jenkins-deploy-AWS.git HEAD:jenkins-jobs"
     }   
 } 
 
