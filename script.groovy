@@ -9,7 +9,7 @@ def increaseVersion(){
 }
 
 def buildJar() {
-    echo "building and testing the application..."
+    echo "building and testing the java application..."
     echo "executing pipeline for $BRANCH_NAME branch"
     sh "mvn clean package"
 } 
