@@ -39,15 +39,18 @@ def commitVersionGit() {
     echo "commiting app version increment to remote gitgit repo..."
     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_PASS')]){
 
-        
-
         sh "git config user.email 'jenkins-ci@server' "
         sh "git config user.name jenkins-ci"
 
+        sh "git status"
+        sh "git branch"
+        sh "git config --list"
+
+        sh "git remote set-url origin https://${GITLAB_USER}:${GITLAB_PASS}@gitlab.com/omotolaadebulu/java-maven-jenkins.git"
         sh "git add ."
-        sh "git commit -m 'version increment commit to remote git repo'"
-        sh "git remote set-url origin https://github.com/Adxeben/Jenkins-deploy-AWS.git"
-        sh "git push https://$GITHUB_USER:$GITHUB_PASS@github.com/Adxeben/Jenkins-deploy-AWS.git HEAD:jenkins-jobs"
+        sh "git commit -m 'version increment commit to git'"
+        sh "git push origin HEAD:main"
+
     }   
 } 
 
