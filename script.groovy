@@ -40,16 +40,12 @@ def commitVersionGit() {
     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_PASS')]){
 
         sh "git config --global user.email 'jasonsunesis@gmail.com'"
-        sh "git config --global user.name 'omotola' "
+        sh "git config --global user.nagit me 'omotola' "
 
-        sh "git status"
-        sh "git branch"
-        sh "git config --list"
 
-        sh "git remote set-url origin https://${GITHUB_USER}:${GITHUB_PASS}@github.com/Adxeben/Jenkins-deploy-AWS.git"
         sh "git add ."
-        sh "git commit -m 'version increment commit to git'"
-        sh "git push origin HEAD:main"
+        sh "git commit -m 'version increment commit to git' || true"
+        sh "git push https://${GITHUB_USER}:${GITHUB_PASS}@github.com/Adxeben/Jenkins-deploy-AWS.git HEAD:main"
     }   
 } 
 
