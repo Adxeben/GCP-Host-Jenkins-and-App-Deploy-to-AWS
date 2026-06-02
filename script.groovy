@@ -1,6 +1,6 @@
 def increaseVersion(){
-    // echo "incrementing app version..."
-    // sh "mvn build-helper:parse-version versions:set \
+    echo "incrementing app version..."
+    // sh "mvn build-helper:parse-versigiton versions:set \
     //     -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
     //     versions:commit"
     // def matcher = readFile("pom.xml") =~ "<version>(.+)</version>"
