@@ -59,24 +59,24 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            echo "Pipeline finished"
-            cleanWs()
-        }
+    // post {
+    //     always {
+    //         echo "Pipeline finished"
+    //         cleanWs()
+    //     }
 
-        success {
-            echo "Build successful"
-            slackSend channel: '#ci-cd', message: "Build passed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-        }
+    //     success {
+    //         echo "Build successful"
+    //         slackSend channel: '#ci-cd', message: "Build passed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+    //     }
 
-        failure {
-            echo "Build failed"
-            slackSend channel: '#ci-cd', message: "Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-        }
+    //     failure {
+    //         echo "Build failed"
+    //         slackSend channel: '#ci-cd', message: "Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+    //     }
 
-        unstable {
-            echo "Build unstable"
-        }
-    } 
+    //     unstable {
+    //         echo "Build unstable"
+    //     }
+    // } 
 }
