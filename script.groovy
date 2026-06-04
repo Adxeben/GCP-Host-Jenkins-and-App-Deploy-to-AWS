@@ -34,7 +34,7 @@ def deployApp() {
     echo "deploying the application to AWS EC2 Instance..."
     def dockerCmd = "docker run -p 3080:3080 -d sunesis003/app-jenkins:jsl-1.0"
     sshagent(['ec2-server-key']) {
-        sh "ssh -o StrictHostKeyChecking=no ec2-user@13.50.112.137 ${dockerCmd}"
+        sh "ssh -o StrictHostKeyChecking=no ubuntu@13.50.112.137 ${dockerCmd}"
     }
 } 
 
