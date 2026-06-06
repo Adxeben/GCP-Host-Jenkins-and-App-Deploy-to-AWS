@@ -1,4 +1,11 @@
-def gv
+library identifier: "jenkins-shared-library@main", retriever: modernSCM(
+    [
+        $class: "GitSCMSource",
+        remote: "https://github.com/Adxeben/Jenkins-deploy-AWS.git",
+        credentialsID: "github-credentials"
+    ]
+)
+
 
 pipeline {
     agent any
@@ -6,58 +13,38 @@ pipeline {
     tools {
         maven "Maven-3.9.16"
     }
+    environment {
+        IMAGE_NAME = "sunesis003/app-jenkins:jsl-1.0"
+    }
     stages {
-        stage("init") {
+        stage("build app") {
             steps {
-                script {
-                    gv = load "script.groovy"
-                    echo "gv = ${gv}"
-
-                }
-            }
-        }
-        stage("version increment") {
-            steps {
-                script {
-                    gv.increaseVersion()
-                }
-            }
-        }
-        stage("build jar") {
-            steps {
-                script {
-                    gv.buildJar()
-                }
+                echo "building application jar..."
+                buildJar()
             }
         }
         stage("create image") {
             steps {
-                script {
-                    gv.createImage()
-                }
+                echo "building the docker image..."
+                createImage(env.IMAGE_NAME)
             }
         }
         stage("publish image") {
             steps {
-                script {
-                    gv.publishImage()
-                }
+                echo "publish docker image to registry..."
+                publishImage(env.IMAGE_NAME)
             }
         }
         stage("deploy app") {
             steps {
-                script {
-                    gv.deployApp()
-                }
+                echo "deploying the application to AWS EC2 Instance..."
+                def dockerCmd = "docker run -p 3080:3080 -d {env.IMAGE_NAME}"
+                sshagent(['aws-ubuntu-server-key']) {
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@13.50.112.137 ${dockerCmd}"
+                }   
             }
         }
-        stage("git version commit") {
-            steps {
-                script {
-                    gv.commitVersionGit()
-                }
-            }
-        }
+        
     }
     // post {
     //     always {
