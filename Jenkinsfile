@@ -14,34 +14,43 @@ pipeline {
         maven "Maven-3.9.16"
     }
     environment {
-        IMAGE_NAME = "sunesis003/app-jenkins:jsl-1.0"
+        IMAGE_NAME = "sunesis003/app-jenkins:jsla-1.0"
     }
     stages {
         stage("build app") {
             steps {
-                echo "building application jar..."
-                buildJar()
+                script {
+                    echo "building application jar..."
+                    buildJar()
+                } 
             }
         }
         stage("create image") {
             steps {
-                echo "building the docker image..."
-                createImage(env.IMAGE_NAME)
+                script {
+                    echo "building the docker image..."
+                    createImage(env.IMAGE_NAME)
+                }
             }
         }
         stage("publish image") {
             steps {
-                echo "publish docker image to registry..."
-                publishImage(env.IMAGE_NAME)
+                script {
+                    echo "publish docker image to registry..."
+                    publishImage(env.IMAGE_NAME)
+                }
+                
             }
         }
         stage("deploy app") {
             steps {
-                echo "deploying the application to AWS EC2 Instance..."
-                def dockerCmd = "docker run -p 3080:3080 -d {IMAGE_NAME}"
-                sshagent(['aws-ubuntu-server-key']) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.108.170 ${dockerCmd}"
-                }   
+                script {
+                    echo "deploying the application to AWS EC2 Instance..."
+                    def dockerCmd = "docker run -p 3080:3080 -d {IMAGE_NAME}"
+                    sshagent(['aws-ubuntu-server-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.108.170 ${dockerCmd}"
+                    }   
+                }
             }
         }
         
