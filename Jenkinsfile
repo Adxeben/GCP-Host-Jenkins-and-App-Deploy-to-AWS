@@ -38,7 +38,7 @@ pipeline {
         stage("deploy app") {
             steps {
                 echo "deploying the application to AWS EC2 Instance..."
-                def dockerCmd = "docker run -p 3080:3080 -d {env.IMAGE_NAME}"
+                def dockerCmd = "docker run -p 3080:3080 -d {IMAGE_NAME}"
                 sshagent(['aws-ubuntu-server-key']) {
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@13.50.112.137 ${dockerCmd}"
                 }   
