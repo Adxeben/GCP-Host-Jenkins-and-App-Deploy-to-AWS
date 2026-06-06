@@ -1,7 +1,7 @@
 library identifier: "jenkins-shared-library@main", retriever: modernSCM(
     [
         $class: "GitSCMSource",
-        remote: "https://github.com/Adxeben/Jenkins-deploy-AWS.git",
+        remote: "https://github.com/Adxeben/Jenkins-shared-library.git",
         credentialsID: "github-credentials"
     ]
 )
