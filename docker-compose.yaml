@@ -1,6 +1,6 @@
 services:
   app:
-    image: sunesis003/app-jenkins:jsla-1.0
+    image: sunesis003/app-jenkins:jsla-3.0
     container_name: app-maven-js
     restart: unless-stopped
     ports:
