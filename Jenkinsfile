@@ -66,17 +66,19 @@ pipeline {
                     echo "deploying the application to AWS EC2 Instance..."
                     // def dockerCmd = "docker run -p 3080:3080 -d ${IMAGE_NAME}"
                     def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
+                    def ec2Instance = "ubuntu@16.16.79.157"
+
                     sshagent(['aws-ubuntu-server-key']) {
 
-                        
-                        // // 1. copy docker-compose file to EC2
-                        // sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ubuntu@16.16.79.157:/home/ubuntu"
 
                         // 1. copy shell script to EC2
-                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ubuntu@16.16.79.157:/home/ubuntu "
+                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ubuntu "
+
+                        // 2. copy docker-compose file to EC2
+                        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ubuntu"
                         
-                        // 2. run command on EC2
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@16.16.79.157 ${shellCmd}"
+                        // 3. run command on EC2
+                        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
                     }   
                 }
             }
