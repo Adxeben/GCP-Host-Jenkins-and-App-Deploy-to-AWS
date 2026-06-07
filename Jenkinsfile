@@ -14,7 +14,7 @@ pipeline {
         maven "Maven-3.9.16"
     }
     environment {
-        IMAGE_NAME = "sunesis003/app-jenkins:jsla-1.0"
+        IMAGE_NAME = "sunesis003/app-jenkins:jsla-2.0"
     }
     stages {
         stage("build app") {
@@ -54,7 +54,7 @@ pipeline {
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ubuntu@13.63.125.201:/home/ubuntu"
 
                         // 2. run command on EC2
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@13.63.125.201 '${dockerComposeCmd}'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@13.63.125.201 ${dockerComposeCmd}"
                     }   
                 }
             }
