@@ -46,9 +46,11 @@ pipeline {
             steps {
                 script {
                     echo "deploying the application to AWS EC2 Instance..."
-                    def dockerCmd = "docker run -p 3080:3080 -d ${IMAGE_NAME}"
+                    // def dockerCmd = "docker run -p 3080:3080 -d ${IMAGE_NAME}"
+                    def dockerComposeCmd = "docker-compose -f docker-compose.yaml -up --detach"
                     sshagent(['aws-ubuntu-server-key']) {
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@16.170.108.170 ${dockerCmd}"
+                        sh "scp docker-compose.yaml ubuntu@13.63.125.201:/home/ubuntu"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@13.63.125.201 ${dockerComposeCmd}"
                     }   
                 }
             }
