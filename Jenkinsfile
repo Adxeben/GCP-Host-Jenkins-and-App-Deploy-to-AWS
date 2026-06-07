@@ -45,45 +45,28 @@ pipeline {
                 
             }
         }
-        stage('Wait for Image Availability') {
-            steps {
-                sh '''
-                    for i in {1..12}; do
-                        docker manifest inspect ${IMAGE_NAME} >/dev/null 2>&1 && exit 0
-
-                        echo "Image not yet available. Waiting 10 seconds..."
-                        sleep 10
-                    done
-
-                    echo "Image never became available."
-                    exit 1
-                '''
-            }
-        }
         stage("deploy app") {
             steps {
                 script {
                     echo "deploying the application to AWS EC2 Instance..."
-                    // def dockerCmd = "docker run -p 3080:3080 -d ${IMAGE_NAME}"
-                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
+
                     def ec2Instance = "ubuntu@16.16.79.157"
 
                     sshagent(['aws-ubuntu-server-key']) {
 
-
-                        // 1. copy shell script to EC2
-                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ubuntu "
-
-                        // 2. copy docker-compose file to EC2
+                        // copy files
+                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ubuntu"
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ubuntu"
-                        
-                        // 3. run command on EC2
-                        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
-                    }   
+
+                        // FIXED SSH EXECUTION (important part)
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ${ec2Instance} \
+                            'export IMAGE_NAME=${IMAGE_NAME} && bash ./server-cmds.sh'
+                        """
+                    }
                 }
             }
         }
-        
     }
     // post {
     //     always {

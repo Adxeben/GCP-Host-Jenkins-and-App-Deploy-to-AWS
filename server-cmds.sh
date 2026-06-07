@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
-sleep 60
-export IMAGE_NAME=$1
-docker-compose -f docker-compose.yaml up -d
+docker-compose -f docker-compose.yaml pull
+docker-compose -f docker-compose.yaml up -d --force-recreate
