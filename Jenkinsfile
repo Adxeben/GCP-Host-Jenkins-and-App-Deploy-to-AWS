@@ -65,7 +65,7 @@ pipeline {
                 script {
                     echo "deploying the application to AWS EC2 Instance..."
                     // def dockerCmd = "docker run -p 3080:3080 -d ${IMAGE_NAME}"
-                    def shellCmd = "bash ./server-cmds.sh"
+                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
                     sshagent(['aws-ubuntu-server-key']) {
 
                         // 1. copy docker-compose file to EC2
