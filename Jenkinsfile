@@ -70,7 +70,7 @@ pipeline {
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ubuntu@16.16.79.157:/home/ubuntu"
 
                         // 2. run command on EC2
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@16.16.79.157 ${dockerComposeCmd}"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@16.16.79.157 IMAGE_NAME=${IMAGE_NAME} ${dockerComposeCmd}"
                     }   
                 }
             }
