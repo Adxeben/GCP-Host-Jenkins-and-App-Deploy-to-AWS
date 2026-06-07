@@ -68,13 +68,14 @@ pipeline {
                     def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
                     sshagent(['aws-ubuntu-server-key']) {
 
-                        // 1. copy docker-compose file to EC2
-                        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ubuntu@16.16.79.157:/home/ubuntu"
+                        
+                        // // 1. copy docker-compose file to EC2
+                        // sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ubuntu@16.16.79.157:/home/ubuntu"
 
-                        // 2. copy shell script to EC2
+                        // 1. copy shell script to EC2
                         sh "scp -o StrictHostKeyChecking=no server-cmds.sh ubuntu@16.16.79.157:/home/ubuntu "
                         
-                        // 3. run command on EC2
+                        // 2. run command on EC2
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@16.16.79.157 ${shellCmd}"
                     }   
                 }
