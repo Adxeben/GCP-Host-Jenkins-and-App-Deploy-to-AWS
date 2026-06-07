@@ -14,7 +14,8 @@ pipeline {
         maven "Maven-3.9.16"
     }
     environment {
-        IMAGE_NAME = "sunesis003/app-jenkins:jsla-3.0"
+        // Define your full Docker image name here (registry/repo:tag)
+        IMAGE_NAME = "sunesis003/app-jenkins:jsla-4.0"
     }
     stages {
         stage("build app") {
@@ -40,6 +41,21 @@ pipeline {
                     publishImage(env.IMAGE_NAME)
                 }
                 
+            }
+        }
+        stage('Wait for Image Availability') {
+            steps {
+                sh '''
+                    for i in {1..12}; do
+                        docker manifest inspect ${IMAGE_NAME} >/dev/null 2>&1 && exit 0
+
+                        echo "Image not yet available. Waiting 10 seconds..."
+                        sleep 10
+                    done
+
+                    echo "Image never became available."
+                    exit 1
+                '''
             }
         }
         stage("deploy app") {
