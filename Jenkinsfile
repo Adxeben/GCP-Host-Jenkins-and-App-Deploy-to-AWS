@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 library identifier: "jenkins-shared-library@main", retriever: modernSCM(
     [
         $class: "GitSCMSource",
@@ -63,14 +65,17 @@ pipeline {
                 script {
                     echo "deploying the application to AWS EC2 Instance..."
                     // def dockerCmd = "docker run -p 3080:3080 -d ${IMAGE_NAME}"
-                    def dockerComposeCmd = "docker-compose -f docker-compose.yaml up -d"
+                    def shellCmd = "bash ./server-cmds.sh"
                     sshagent(['aws-ubuntu-server-key']) {
 
-                        // 1. copy file
+                        // 1. copy docker-compose file to EC2
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ubuntu@16.16.79.157:/home/ubuntu"
 
-                        // 2. run command on EC2
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@16.16.79.157 IMAGE_NAME=${IMAGE_NAME} ${dockerComposeCmd}"
+                        // 2. copy shell script to EC2
+                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ubuntu@16.16.79.157:/home/ubuntu "
+                        
+                        // 3. run command on EC2
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@16.16.79.157 ${shellCmd}"
                     }   
                 }
             }
