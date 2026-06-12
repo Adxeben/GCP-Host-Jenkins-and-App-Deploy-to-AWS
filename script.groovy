@@ -1,12 +1,12 @@
-// def increaseVersion(){
-//     echo "incrementing app version..."
-//     sh "mvn build-helper:parse-versigiton versions:set \
-//         -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
-//         versions:commit"
-//     def matcher = readFile("pom.xml") =~ "<version>(.+)</version>"
-//     def version = matcher[0][1]
-//     env.IMAGE_TAG = "$version-$BUILD_NUMBER"
-// }
+def increaseVersion(){
+    echo "incrementing app version..."
+    sh "mvn build-helper:parse-version versions:set \
+        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
+        versions:commit"
+    def matcher = readFile("pom.xml") =~ "<version>(.+)</version>"
+    def version = matcher[0][1]
+    env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+}
 
 // def buildJar() {
 //     echo "building and testing the java application..."
@@ -30,33 +30,32 @@
 // } 
 
 
-// def deployApp() {
-//     echo "deploying the application to AWS EC2 Instance..."
-//     // def dockerCmd = "docker run -p 3080:3080 -d sunesis003/app-jenkins:jsl-1.0"
-//     def dockerCmd = "docker run -p 80:8080 -d sunesis003/app-jenkins:${IMAGE_TAG}"
-//     sshagent(['aws-ubuntu-server-key']) {
-//         sh "ssh -o StrictHostKeyChecking=no ubuntu@13.50.112.137 ${dockerCmd}"
-//     }
-// } 
-
-
-// def commitVersionGit() {
-//     echo "commiting app version increment to remote git repo..."
-//     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_PASS')]){
+def deployApp() {
+    echo "deploying the application to AWS EC2 Instance..."
     
-//         sh "git config user.email 'jenkins-ci@server' "
-//         sh "git config user.name jenkins-ci"
-    
-//         sh "git status"
-//         sh "git branch"
-//         sh "git config --list"
-    
-//         sh "git remote set-url origin https://${GITLAB_USER}:${GITLAB_PASS}@gitlab.com/omotolaadebulu/java-maven-jenkins.git"
-//         sh "git add ."
-//         sh "git commit -m 'version increment commit to git'"
-//         sh "git push origin HEAD:main"
+    def ec2Instance = "ubuntu@16.16.79.157"
+    def shellCmd = "bash ./server-cmds.sh && export IMAGE_NAME=${IMAGE_NAME}"
 
-//     }   
-// } 
+    sshagent(['aws-ubuntu-server-key']) {
+        // copy files to server (shell script and docker-compose file)
+        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ubuntu"
+        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ubuntu"
 
-// return this
+        // SSH EXECUTION (ssh into server and execute script)
+        sh ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}
+    }   
+} 
+
+
+def commitVersionGit() {
+    echo "commiting app version increment to remote git repo..."
+    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_PASS')]){
+        sh "git remote set-url origin https://${GITHUB_USER}:${GITHUB_PASS}@https://github.com/Adxeben/Jenkins-shared-library.git"
+        sh "git add ."
+        sh "git commit -m 'version increment commit to git'"
+        sh "git push origin HEAD:main"
+
+    }   
+} 
+
+return this

@@ -6,27 +6,38 @@ library identifier: "jenkins-shared-library@main", retriever: modernSCM(
         remote: "https://github.com/Adxeben/Jenkins-shared-library.git",
         credentialsID: "github-credentials"
     ]
-)
+)_
 
+def gv
 
 pipeline {
     agent any
 
-    tools {
+    tools { 
         maven "Maven-3.9.16"
     }
-    environment {
-        // Define your full Docker image name here (registry/repo:tag)
-        IMAGE_NAME = "sunesis003/app-jenkins:jsla-4.0"
-    }
     stages {
+        stage("load script") {
+            steps {
+                script {
+                    def gv = load 'script.groovy'
+                } 
+            }
+        }
+         stage("incrementing app version") {
+            steps {
+                script {
+                    gv.increaseVersion()
+                } 
+            }
+        }
         stage("build app") {
             steps {
                 script {
                     echo "building application jar..."
                     buildJar()
                 } 
-            }
+            } 
         }
         stage("create image") {
             steps {
@@ -48,22 +59,14 @@ pipeline {
         stage("deploy app") {
             steps {
                 script {
-                    echo "deploying the application to AWS EC2 Instance..."
-
-                    def ec2Instance = "ubuntu@16.16.79.157"
-
-                    sshagent(['aws-ubuntu-server-key']) {
-
-                        // copy files
-                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ubuntu"
-                        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ubuntu"
-
-                        // FIXED SSH EXECUTION (important part)
-                        sh """
-                            ssh -o StrictHostKeyChecking=no ${ec2Instance} \
-                            'export IMAGE_NAME=${IMAGE_NAME} && bash ./server-cmds.sh'
-                        """
-                    }
+                    gv.deployApp()
+                }
+            }
+        }
+        stage ("commit version update"){
+            steps {
+                script {
+                    gv.commitVersionGit()
                 }
             }
         }

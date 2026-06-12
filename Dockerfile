@@ -24,6 +24,6 @@ WORKDIR /app
 # Copy only the built JAR from builder
 COPY --from=builder /app/target/java-maven-app-*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 3080
 
 CMD ["java", "-jar", "app.jar"]
