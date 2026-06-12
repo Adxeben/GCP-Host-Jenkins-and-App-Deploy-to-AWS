@@ -33,7 +33,7 @@ def increaseVersion(){
 def deployApp() {
     echo "deploying the application to AWS EC2 Instance..."
     
-    def ec2Instance = "ubuntu@16.16.79.157"
+    def ec2Instance = "ubuntu@16.16.94.219"
     def shellCmd = "bash ./server-cmds.sh && export IMAGE_NAME=${IMAGE_NAME}"
 
     sshagent(['aws-ubuntu-server-key']) {
