@@ -42,7 +42,7 @@ def deployApp() {
         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ubuntu"
 
         // SSH EXECUTION (ssh into server and execute script)
-        sh ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}
+        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
     }   
 } 
 
