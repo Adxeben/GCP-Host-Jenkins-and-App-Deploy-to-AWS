@@ -20,7 +20,7 @@ pipeline {
         stage("load script") {
             steps {
                 script {
-                    def gv = load 'script.groovy'
+                    gv = load 'script.groovy'
                 } 
             }
         }
@@ -76,7 +76,7 @@ pipeline {
     //         echo "Pipeline finished"
     //         cleanWs()
     //     }
-    
+
     //     success {
     //         echo "Build successful"
     //         slackSend channel: '#ci-cd', message: "Build passed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
