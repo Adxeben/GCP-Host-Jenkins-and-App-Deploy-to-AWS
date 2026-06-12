@@ -34,7 +34,7 @@ def deployApp() {
     echo "deploying the application to AWS EC2 Instance..."
     
     def ec2Instance = "ubuntu@16.16.94.219"
-    def shellCmd = "bash ./server-cmds.sh && export IMAGE_NAME=${IMAGE_NAME}"
+    def shellCmd = "export IMAGE_NAME=${IMAGE_NAME} && bash ./server-cmds.sh"
 
     sshagent(['aws-ubuntu-server-key']) {
         // copy files to server (shell script and docker-compose file)
