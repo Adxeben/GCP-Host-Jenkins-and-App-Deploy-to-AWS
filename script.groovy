@@ -33,13 +33,13 @@ def increaseVersion(){
 def deployApp() {
     echo "deploying the application to AWS EC2 Instance..."
     
-    def ec2Instance = "ubuntu@16.16.94.219:/home/ubuntu"
+    def ec2Instance = "ubuntu@13.49.125.58"
     def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
 
     sshagent(['aws-ubuntu-server-key']) {
         // copy files to server (shell script and docker-compose file)
-        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}"
-        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}"
+        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ubuntu"
+        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ubuntu"
 
         // SSH EXECUTION (ssh into server and execute script)
         sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
