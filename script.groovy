@@ -47,15 +47,27 @@ def deployApp() {
 } 
 
 
-def commitVersionGit() {
-    echo "commiting app version increment to remote git repo..."
-    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_PASS')]){
-        sh "git remote set-url origin https://${GITHUB_USER}:${GITHUB_PASS}@github.com/Adxeben/Jenkins-deploy-AWS.git"
-        sh "git add ."
-        sh "git commit -m 'version increment commit to git'"
-        sh "git push origin HEAD:main"
+import java.net.URLEncoder
 
-    }   
-} 
+def commitVersionGit() {
+    echo "committing app version increment to remote git repo..."
+    withCredentials([usernamePassword(credentialsId: 'github-credentials',
+                                       usernameVariable: 'GITHUB_USER',
+                                       passwordVariable: 'GITHUB_PASS')]) {
+        
+        // Encode special characters in both user and pass
+        def encodedUser = URLEncoder.encode(GITHUB_USER, "UTF-8")
+        def encodedPass = URLEncoder.encode(GITHUB_PASS, "UTF-8")
+        def remoteUrl = "https://${encodedUser}:${encodedPass}@github.com/Adxeben/Jenkins-deploy-AWS.git"
+        
+        // Wrap the URL in single quotes inside the shell to protect against shell expansion
+        sh """
+            git remote set-url origin '${remoteUrl}'
+            git add .
+            git commit -m 'version increment commit to git'
+            git push origin HEAD:main
+        """
+    }
+}
 
 return this
