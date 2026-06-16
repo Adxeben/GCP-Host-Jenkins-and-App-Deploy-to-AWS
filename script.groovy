@@ -33,7 +33,7 @@ def increaseVersion(){
 def deployApp() {
     echo "deploying the application to AWS EC2 Instance..."
     
-    def ec2Instance = "ubuntu@13.49.125.58"
+    def ec2Instance = "ubuntu@16.16.139.21"
     def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
 
     sshagent(['aws-ubuntu-server-key']) {
@@ -50,7 +50,7 @@ def deployApp() {
 def commitVersionGit() {
     echo "commiting app version increment to remote git repo..."
     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_PASS')]){
-        sh "git remote set-url origin https://${GITHUB_USER}:${GITHUB_PASS}@https://github.com/Adxeben/Jenkins-shared-library.git"
+        sh "git remote set-url origin https://${GITHUB_USER}:${GITHUB_PASS}@github.com/Adxeben/Jenkins-deploy-AWS.git"
         sh "git add ."
         sh "git commit -m 'version increment commit to git'"
         sh "git push origin HEAD:main"
