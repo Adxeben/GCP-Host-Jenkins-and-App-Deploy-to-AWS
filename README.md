@@ -1,3 +1,4 @@
+(See jenkins-jobs branch for project)
 # Cross-Cloud CI/CD Pipeline: GCP → AWS
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
@@ -83,7 +84,9 @@ I provisioned a **Jenkins CI server on Google Cloud Platform (GCP)** to automate
 ![alt text](<Screenshot 2026-06-19 093957.png>)
 <br/>
 <br/> 
+
 ![alt text](<Screenshot 2026-06-19 094102.png>)
+
 > *Show the successful execution of all stages (Increment version, Build, Test, Push, Deploy, Commit version increment to git).*
 
 ### 2. GCP VM Instance (Jenkins Master)
