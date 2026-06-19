@@ -46,28 +46,69 @@ def deployApp() {
     }   
 } 
 
-// URL Encode the Password 
-import java.net.URLEncoder
+
 
 def commitVersionGit() {
-    echo "committing app version increment to remote git repo..."
+    echo "Committing app version increment to remote git repo..."
     withCredentials([usernamePassword(credentialsId: 'github-credentials',
                                        usernameVariable: 'GITHUB_USER',
                                        passwordVariable: 'GITHUB_PASS')]) {
-        
-        // Encode special characters in both user and pass
-        def encodedUser = URLEncoder.encode(GITHUB_USER, "UTF-8")
-        def encodedPass = URLEncoder.encode(GITHUB_PASS, "UTF-8")
-        def remoteUrl = "https://${encodedUser}:${encodedPass}@github.com/Adxeben/Jenkins-deploy-AWS.git"
-        
-        // Wrap the URL in single quotes inside the shell to protect against shell expansion
         sh """
-            git remote set-url origin '${remoteUrl}'
+            # Set up GIT_ASKPASS to supply the token when Git asks for a password
+            export GIT_ASKPASS=\$(mktemp)
+            echo 'echo \$GITHUB_PASS' > \$GIT_ASKPASS
+            chmod +x \$GIT_ASKPASS
+
+            # Set remote URL with only the username (password is supplied via ASKPASS)
+            git remote set-url origin https://${GITHUB_USER}@github.com/Adxeben/Jenkins-deploy-AWS.git
+
+            # Fetch the latest from remote
+            git fetch origin
+
+            # Switch to the main branch (or create it if it doesn't exist locally)
+            git checkout main || git checkout -b main
+
+            # Rebase local main onto remote main to incorporate upstream changes
+            # (Use --rebase to avoid merge commits; if you prefer merge, use git pull --no-rebase)
+            git pull --rebase origin main
+
+            # Now add and commit changes (only if there are changes to commit)
             git add .
-            git commit -m 'version increment commit to git'
-            git push origin HEAD:main
+            if ! git diff --cached --quiet; then
+                git commit -m 'version increment commit to git'
+                # Push the updated main branch
+                git push origin main
+            else
+                echo "No changes to commit, skipping push."
+            fi
+
+            # Clean up the temporary ASKPASS script
+            rm -f \$GIT_ASKPASS
         """
     }
 }
+// URL Encode the Password 
+// import java.net.URLEncoder
+
+// def commitVersionGit() {
+//     echo "committing app version increment to remote git repo..."
+//     withCredentials([usernamePassword(credentialsId: 'github-credentials',
+//                                        usernameVariable: 'GITHUB_USER',
+//                                        passwordVariable: 'GITHUB_PASS')]) {
+        
+//         // Encode special characters in both user and pass
+//         def encodedUser = URLEncoder.encode(GITHUB_USER, "UTF-8")
+//         def encodedPass = URLEncoder.encode(GITHUB_PASS, "UTF-8")
+//         def remoteUrl = "https://${encodedUser}:${encodedPass}@github.com/Adxeben/Jenkins-deploy-AWS.git"
+        
+//         // Wrap the URL in single quotes inside the shell to protect against shell expansion
+//         sh """
+//             git remote set-url origin '${remoteUrl}'
+//             git add .
+//             git commit -m 'version increment commit to git'
+//             git push origin HEAD:main
+//         """
+//     }
+// }
 
 return this
