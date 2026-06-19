@@ -33,7 +33,7 @@ def increaseVersion(){
 def deployApp() {
     echo "deploying the application to AWS EC2 Instance..."
     
-    def ec2Instance = "ubuntu@16.16.139.21"
+    def ec2Instance = "ubuntu@16.170.35.76"
     def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
 
     sshagent(['aws-ubuntu-server-key']) {
@@ -46,7 +46,7 @@ def deployApp() {
     }   
 } 
 
-
+// URL Encode the Password 
 import java.net.URLEncoder
 
 def commitVersionGit() {
