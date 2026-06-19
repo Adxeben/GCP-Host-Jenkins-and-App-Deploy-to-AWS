@@ -42,7 +42,7 @@ I provisioned a **Jenkins CI server on Google Cloud Platform (GCP)** to automate
     H --> I[Docker Compose pulls & deploys new version]
     I --> J[Commit version update back to GitHub]
 
-![alt text](<Screenshot 2026-06-19 112242.png>)
+
 
 > ```
 
@@ -83,9 +83,10 @@ I provisioned a **Jenkins CI server on Google Cloud Platform (GCP)** to automate
 
 *Add your screenshots here to visually prove the working pipeline!*
 
-### 1. Jenkins Pipeline (Blue Ocean / Stage View)
+### 1. Jenkins Pipeline (Stage View)
 ![alt text](<Screenshot 2026-06-19 093957.png>)
-</br> 
+<br/>
+<br/> 
 ![alt text](<Screenshot 2026-06-19 094102.png>)
 > *Show the successful execution of all stages (Increment version, Build, Test, Push, Deploy, Commit version increment to git).*
 
