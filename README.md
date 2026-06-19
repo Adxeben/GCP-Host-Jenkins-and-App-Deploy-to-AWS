@@ -1,5 +1,5 @@
-# Cross-Cloud CI/CD Pipeline: GCP → AWS 
-(See jenkins-jobs branch)
+# Cross-Cloud CI/CD Pipeline: GCP → AWS  (See jenkins-jobs branch)
+
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
