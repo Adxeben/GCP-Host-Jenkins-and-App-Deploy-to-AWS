@@ -42,10 +42,6 @@ I provisioned a **Jenkins CI server on Google Cloud Platform (GCP)** to automate
     H --> I[Docker Compose pulls & deploys new version]
     I --> J[Commit version update back to GitHub]
 
-
-
-> ```
-
 ---
 
 ## 🛠️ Built With
@@ -130,10 +126,6 @@ If you want to replicate this setup, ensure you have:
 - [ ] **Orchestration**: Move from Docker Compose to Kubernetes (EKS or GKE) for auto-scaling.
 - [ ] **Monitoring**: Add Prometheus + Grafana stack to monitor the live application.
 - [ ] **Notifications**: Integrate Slack/Email alerts for pipeline failures.
-
----
-
-
 
 ---
 ⭐ *If you found this project helpful, please give it a star! It helps me build my DevOps portfolio.*
