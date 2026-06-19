@@ -35,8 +35,8 @@ I provisioned a **Jenkins CI server on Google Cloud Platform (GCP)** to automate
 ```mermaid
 graph TD
     A[Developer Push to GitHub] --> B[Jenkins Master (GCP VM)]
-    B --> C[Build & Test with Maven]
-    C --> D[Dynamic Version Increment]
+    B --> C[Dynamic Version Increment]
+    C --> D[Build & Test with Maven]
     D --> E[Build Docker Image]
     E --> F[Push Image to Docker Hub]
     F --> G[SSH into AWS EC2]
@@ -45,70 +45,7 @@ graph TD
     I --> J[Commit version update back to GitHub]
 ```
 
->  [ Developer ] 
-       │ (Pushes Code / Merges PR)
-       ▼
-┌────────────────────────────────────────────────────────┐
-│ 1. Git Repository (GitHub / GitLab / Bitbucket)        │◀──────────────────┐
-└────────────────────────────────────────────────────────┘                   │
-       │                                                                     │
-       │ (Webhook / Polls Trigger)                                           │
-       ▼                                                                     │
-┌────────────────────────────────────────────────────────┐                   │
-│ 2. Jenkins Automation Server                           │                   │
-│                                                        │                   │
-│   ┌────────────────────────────────────────────────┐   │                   │
-│   │ Pipeline Execution Engine                      │   │                   │
-│   └────────────────────────────────────────────────┘   │                   │
-│          │                                             │                   │
-│          ▼ [Stage 1: Read current pom.xml/package.json]│                   │
-│   ┌────────────────────────────────────────────────┐   │                   │
-│   │ Increment Version (Patch/Minor/Major)          │   │                   │
-│   └────────────────────────────────────────────────┘   │                   │
-│          │                                             │                   │
-│          ▼ [Stage 2: Compile code, run unit tests]     │                   │
-│   ┌────────────────────────────────────────────────┐   │                   │
-│   │ Build Application Artifact (.jar/.war/dist)    │   │                   │
-│   └────────────────────────────────────────────────┘   │                   │
-│          │                                             │                   │
-│          ▼ [Stage 3: Docker build -t image:tag]        │                   │
-│   ┌────────────────────────────────────────────────┐   │                   │
-│   │ Build & Tag Docker Image                       │   │                   │
-│   └────────────────────────────────────────────────┘   │                   │
-│          │                                             │                   │
-│          ▼ [Stage 4: Git commit & push new version]    │                   │
-│   ┌────────────────────────────────────────────────┐   │                   │
-│   │ Commit Version Bump                            │───┼───────────────────┘
-│   └────────────────────────────────────────────────┘   │ (SSH / HTTPS Push)
-│          │                                             │
-│          ▼ [Stage 5: Docker push to Registry]          │
-│   ┌────────────────────────────────────────────────┐   │
-│   │ Publish Image to Registry                      │   │
-│   └────────────────────────────────────────────────┘   │
-└──────────────────────┬─────────────────────────────────┘
-                       │
-                       │ (Docker Push)
-                       ▼
-┌────────────────────────────────────────────────────────┐
-│ 3. Docker Registry (Docker Hub / AWS ECR)              │
-└────────────────────────────────────────────────────────┘
-                       ▲
-                       │ (Docker Pull via SSH Deploy Script)
-                       │
-┌──────────────────────┴─────────────────────────────────┐
-│ 4. AWS Cloud Environment                               │
-│                                                        │
-│   ┌────────────────────────────────────────────────┐   │
-│   │ Amazon EC2 Instance                            │   │
-│   │                                                │   │
-│   │  [ Docker Daemon ]                             │   │
-│   │         │                                      │   │
-│   │         ▼                                      │   │
-│   │  ┌──────────────────────────────────────────┐  │   │
-│   │  │ Running Application Container            │  │   │
-│   │  └──────────────────────────────────────────┘  │   │
-│   └────────────────────────────────────────────────┘   │
-└────────────────────────────────────────────────────────┘
+![alt text](<Screenshot 2026-06-19 112242.png>)
 
 > ```
 
@@ -151,24 +88,25 @@ graph TD
 
 ### 1. Jenkins Pipeline (Blue Ocean / Stage View)
 ![alt text](<Screenshot 2026-06-19 093957.png>)
-
-> *Show the successful execution of all stages (Build, Test, Push, Deploy).*
+</br> 
+![alt text](<Screenshot 2026-06-19 094102.png>)
+> *Show the successful execution of all stages (Increment version, Build, Test, Push, Deploy, Commit version increment to git).*
 
 ### 2. GCP VM Instance (Jenkins Master)
-![GCP VM Console](screenshots/gcp-vm.png)
+![alt text](<Screenshot 2026-06-19 105116.png>)
 > *Show the Compute Engine instance running the Jenkins server.*
 
 ### 3. AWS EC2 Instance (Deployment Target)
-![AWS EC2 Console](screenshots/aws-ec2.png)
+![alt text](<Screenshot 2026-06-19 105635.png>)
 > *Show the EC2 instance details and public IP where the app is hosted.*
 
 ### 4. Docker Hub Repository
-![Docker Hub](screenshots/docker-hub.png)
+![alt text](<Screenshot 2026-06-19 113542.png>)
 > *Show the multiple tagged images being pushed automatically with version numbers.*
 
 ### 5. Deployed Application
-![Live App](screenshots/live-app.png)
-> *Show the web application running successfully on the AWS EC2 public IP/port.*
+![alt text](<Screenshot 2026-06-19 110214.png>)
+> *Show container running successfully on the AWS EC2 public IP/port.*
 
 ---
 
@@ -200,8 +138,8 @@ If you want to replicate this setup, ensure you have:
 ## 👨‍💻 Author
 
 **Your Name**  
-[![GitHub](https://img.shields.io/badge/GitHub-YourHandle-181717?logo=github)](https://github.com/yourhandle)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-YourProfile-0A66C2?logo=linkedin)](https://linkedin.com/in/yourprofile)
+[![GitHub](https://img.shields.io/badge/GitHub-YourHandle-181717?logo=github)](https://github.com/Adxeben?tab=repositories)
+
 
 ---
 ⭐ *If you found this project helpful, please give it a star! It helps me build my DevOps portfolio.*
