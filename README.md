@@ -32,8 +32,6 @@ I provisioned a **Jenkins CI server on Google Cloud Platform (GCP)** to automate
 
 *Below is the end-to-end flow of the pipeline:*
 
-```mermaid
-graph TD
     A[Developer Push to GitHub] --> B[Jenkins Master (GCP VM)]
     B --> C[Dynamic Version Increment]
     C --> D[Build & Test with Maven]
@@ -43,7 +41,6 @@ graph TD
     G --> H[Execute remote shell script]
     H --> I[Docker Compose pulls & deploys new version]
     I --> J[Commit version update back to GitHub]
-```
 
 ![alt text](<Screenshot 2026-06-19 112242.png>)
 
