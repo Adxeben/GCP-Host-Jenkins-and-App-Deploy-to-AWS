@@ -77,8 +77,6 @@ I provisioned a **Jenkins CI server on Google Cloud Platform (GCP)** to automate
 
 ## 📸 Screenshots
 
-*Add your screenshots here to visually prove the working pipeline!*
-
 ### 1. Jenkins Pipeline (Stage View)
 ![alt text](<Screenshot 2026-06-19 093957.png>)
 <br/>
