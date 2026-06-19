@@ -54,39 +54,61 @@ def commitVersionGit() {
                                        usernameVariable: 'GITHUB_USER',
                                        passwordVariable: 'GITHUB_PASS')]) {
         sh """
-            # Set up GIT_ASKPASS to supply the token when Git asks for a password
+            # ---- Set up GIT_ASKPASS for secure authentication ----
             export GIT_ASKPASS=\$(mktemp)
             echo 'echo \$GITHUB_PASS' > \$GIT_ASKPASS
             chmod +x \$GIT_ASKPASS
 
-            # Set remote URL with only the username (password is supplied via ASKPASS)
+            # ---- Set remote URL (username only, token via ASKPASS) ----
             git remote set-url origin https://${GITHUB_USER}@github.com/Adxeben/Jenkins-deploy-AWS.git
 
-            # Fetch the latest from remote
+            # ---- Fetch latest from remote ----
             git fetch origin
 
-            # Switch to the main branch (or create it if it doesn't exist locally)
-            git checkout main || git checkout -b main
-
-            # Rebase local main onto remote main to incorporate upstream changes
-            # (Use --rebase to avoid merge commits; if you prefer merge, use git pull --no-rebase)
-            git pull --rebase origin main
-
-            # Now add and commit changes (only if there are changes to commit)
-            git add .
-            if ! git diff --cached --quiet; then
-                git commit -m 'version increment commit to git'
-                # Push the updated main branch
-                git push origin main
+            # ---- Stash any local changes (including untracked? we'll use --include-untracked) ----
+            # This saves your current modifications so we can pull cleanly.
+            if ! git diff --quiet || ! git diff --cached --quiet || git ls-files --others --exclude-standard | grep -q .; then
+                echo "Stashing local changes before pull..."
+                git stash push --include-untracked -m "jenkins-stash-${BUILD_NUMBER}"
+                STASHED=true
             else
-                echo "No changes to commit, skipping push."
+                echo "No local changes to stash."
+                STASHED=false
             fi
 
-            # Clean up the temporary ASKPASS script
+            # ---- Ensure we are on 'main' branch ----
+            git checkout main || git checkout -b main
+
+            # ---- Pull latest changes (rebase to keep history linear) ----
+            git pull --rebase origin main
+
+            # ---- Restore stashed changes (if any) ----
+            if [ "\$STASHED" = true ]; then
+                echo "Restoring stashed changes..."
+                if ! git stash pop; then
+                    echo "ERROR: Merge conflicts after popping stash. Please resolve manually."
+                    exit 1
+                fi
+                # After pop, we might have conflicts; we could check, but we'll let the commit fail if unresolved.
+                # Add all changes (both from stash and any new changes) 
+            fi
+
+            # ---- Add and commit (only if there are changes) ----
+            git add .
+            if ! git diff --cached --quiet; then
+                git commit -m "version increment commit to git (build ${BUILD_NUMBER})"
+                git push origin main
+            else
+                echo "No changes to commit after pull – skipping push."
+            fi
+
+            # ---- Clean up ----
             rm -f \$GIT_ASKPASS
         """
     }
 }
+
+
 // URL Encode the Password 
 // import java.net.URLEncoder
 
