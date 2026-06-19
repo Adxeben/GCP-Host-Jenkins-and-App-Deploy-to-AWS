@@ -136,7 +136,7 @@ If you want to replicate this setup, ensure you have:
 ## 👨‍💻 Author
 
 **Your Name**  
-[![GitHub](https://img.shields.io/badge/GitHub-YourHandle-181717?logo=github)](https://github.com/Adxeben?tab=repositories)
+[![GitHub](https://img.shields.io/Adxeben?tab=repositories)](https://github.com/Adxeben?tab=repositories)
 
 
 ---
