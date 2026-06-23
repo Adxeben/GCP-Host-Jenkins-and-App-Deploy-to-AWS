@@ -98,6 +98,8 @@ I provisioned a **Jenkins CI server on Google Cloud Platform (GCP)** to automate
 
 ### 5. Deployed Application
 ![alt text](<Screenshot 2026-06-19 110214.png>)
+<br/>
+![alt text](<java-maven app.png>)
 > *Show container running successfully on the AWS EC2 public IP/port.*
 
 ---
